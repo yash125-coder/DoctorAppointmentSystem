@@ -34,35 +34,29 @@ export default function Home() {
       <Navbar />
       <main>
         <section className="relative overflow-hidden bg-gradient-to-b from-teal-50 via-white to-white">
-          <div className="container-app grid min-h-[680px] items-center gap-12 py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-24">
-            <div>
-              <span className="pill"><BadgeCheck size={14} className="mr-1"/> Trusted care, thoughtfully connected</span>
-              <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mt-6 max-w-3xl text-5xl font-black leading-[1.03] tracking-tight text-ink sm:text-6xl">
+          <div className="container-app flex min-h-[600px] items-center justify-center py-16 lg:py-24">
+            <div className="max-w-3xl text-center">
+              <span className="pill mx-auto inline-flex items-center justify-center">
+                <BadgeCheck size={14} className="mr-1"/> Trusted care, thoughtfully connected
+              </span>
+              <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mt-6 text-5xl font-black leading-[1.03] tracking-tight text-ink sm:text-6xl">
                 Healthcare that fits into <span className="text-teal-600">your life.</span>
               </motion.h1>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
+              <p className="mt-6 max-w-xl mx-auto text-lg leading-8 text-slate-600">
                 Find the right doctor, see transparent fees and available times, and book without the usual back-and-forth.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link to="/doctors" className="btn-primary px-6 py-3.5">Book an Appointment <ArrowRight size={18}/></Link>
-                <a href="#how-it-works" className="btn-secondary px-6 py-3.5">How it works</a>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link to="/doctors" className="btn-primary px-6 py-3.5 inline-flex items-center justify-center">
+                  Book an Appointment <ArrowRight size={18} className="ml-2"/>
+                </Link>
+                <a href="#how-it-works" className="btn-secondary px-6 py-3.5 inline-flex items-center justify-center">
+                  How it works
+                </a>
               </div>
-              <div className="mt-9 flex flex-wrap gap-x-7 gap-y-3 text-sm font-semibold text-slate-600">
+              <div className="mt-9 flex flex-wrap justify-center gap-x-7 gap-y-3 text-sm font-semibold text-slate-600">
                 <span className="flex items-center gap-2"><ShieldCheck className="text-teal-600" size={18}/> Secure accounts</span>
                 <span className="flex items-center gap-2"><CalendarCheck2 className="text-teal-600" size={18}/> Live slot availability</span>
                 <span className="flex items-center gap-2"><HeartHandshake className="text-teal-600" size={18}/> Patient-first design</span>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-teal-200/40 blur-3xl"/>
-              <div className="card relative overflow-hidden p-5 sm:p-7">
-                <div className="rounded-3xl bg-gradient-to-br from-ink to-slate-700 p-7 text-white">
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">Your care, organized</span>
-                    <HeartHandshake size={25}/>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
