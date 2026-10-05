@@ -50,3 +50,21 @@ export function appointmentEmail({ patientName, doctorName, date, time, status }
     `
   };
 }
+
+export function verificationEmail(otp) {
+  return {
+    subject: "Doctor Sign-up Verification Code",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:620px;margin:auto;padding:28px;color:#17324d">
+        <h2 style="color:#0f766e">MediBook Pro - Verification</h2>
+        <p>Hello Doctor,</p>
+        <p>Thank you for signing up with MediBook Pro. Please use the following One-Time Password (OTP) to verify your email address:</p>
+        <div style="background:#f0fdfa;padding:18px;border-radius:14px;text-align:center;font-size:24px;font-weight:bold;color:#0f766e;margin:20px 0;">
+          ${otp}
+        </div>
+        <p>This code is valid for a limited time. Please do not share this code with anyone.</p>
+        <p style="color:#64748b">If you did not request this, please ignore this email.</p>
+      </div>
+    `
+  };
+}
