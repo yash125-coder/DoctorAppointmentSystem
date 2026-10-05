@@ -42,8 +42,14 @@ export async function register(req, res) {
       ]
     });
 
-    // Generate 6-digit verification code/OTP for Doctor
+    // Generate 6-digit OTP for Doctor
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Save OTP and Expiry (10 minutes) in Database
+    user.verificationCode = otp;
+    user.verificationCodeExpires = Date.now() + 10 * 60 * 1000;
+    await user.save({ validateBeforeSave: false });
+
     const emailData = verificationEmail(otp);
 
     await sendEmail({
@@ -56,8 +62,38 @@ export async function register(req, res) {
   const token = signToken({ id: user._id, role: user.role });
   res.status(201).json({
     token,
-    user: { id: user._id, name: user.name, email: user.email, role: user.role }
+    user: { id: user._id, name: user.name, email: user.email, role: user.role, isVerified: user.isVerified }
   });
+}
+
+export async function verifyOTP(req, res) {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({ message: "Email and OTP are required." });
+  }
+
+  const user = await User.findOne({ email }).select("+verificationCode +verificationCodeExpires");
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found." });
+  }
+
+  if (user.isVerified) {
+    return res.status(400).json({ message: "Account is already verified." });
+  }
+
+  if (user.verificationCode !== otp || user.verificationCodeExpires < Date.now()) {
+    return res.status(400).json({ message: "Invalid or expired OTP." });
+  }
+
+  // Mark user as verified and clear OTP fields
+  user.isVerified = true;
+  user.verificationCode = undefined;
+  user.verificationCodeExpires = undefined;
+  await user.save({ validateBeforeSave: false });
+
+  res.json({ message: "Email verified successfully!" });
 }
 
 export async function login(req, res) {
@@ -77,7 +113,7 @@ export async function login(req, res) {
   const token = signToken({ id: user._id, role: user.role });
   res.json({
     token,
-    user: { id: user._id, name: user.name, email: user.email, role: user.role }
+    user: { id: user._id, name: user.name, email: user.email, role: user.role, isVerified: user.isVerified }
   });
 }
 
@@ -93,7 +129,6 @@ export async function forgotPassword(req, res) {
   const { email } = req.body;
   const user = await User.findOne({ email });
 
-  // Same response whether or not an account exists.
   if (!user) {
     return res.json({ message: "If an account exists, reset instructions have been sent." });
   }
