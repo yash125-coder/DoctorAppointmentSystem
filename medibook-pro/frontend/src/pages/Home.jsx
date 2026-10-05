@@ -1,4 +1,4 @@
-import { ArrowRight, BadgeCheck, CalendarCheck2, ChevronRight, Clock3, HeartHandshake, Search, ShieldCheck, Star, Stethoscope, UsersRound } from "lucide-react";
+import { ArrowRight, BadgeCheck, CalendarCheck2, ChevronRight, HeartHandshake, Search, ShieldCheck, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -62,9 +62,8 @@ export default function Home() {
                     <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">Your care, organized</span>
                     <HeartHandshake size={25}/>
                   </div>
-                  <div className="mt-16">
-              
-             </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
