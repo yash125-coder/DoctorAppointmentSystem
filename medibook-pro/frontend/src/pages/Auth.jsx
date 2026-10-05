@@ -42,6 +42,8 @@ export function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [role, setRole] = useState("patient");
+  const [step, setStep] = useState(1); // 1 = Registration details, 2 = OTP Verification
+  const [otp, setOtp] = useState("");
   const [form, setForm] = useState({ name:"",email:"",password:"",phone:"",specialization:"",location:"" });
   const [busy,setBusy]=useState(false);
 
@@ -49,12 +51,40 @@ export function Register() {
     e.preventDefault(); setBusy(true);
     try {
       const user = await register({...form,role});
-      toast.success("Account created.");
-      navigate(user.role === "doctor" ? "/doctor-dashboard" : "/dashboard");
+      if (user.role === "doctor") {
+        toast.success("Account created! Check your email for OTP.");
+        setStep(2); // Show OTP form for doctors
+      } else {
+        toast.success("Account created.");
+        navigate("/dashboard");
+      }
     } catch(err) { toast.error(err.response?.data?.message || "Unable to create account."); }
     finally { setBusy(false); }
   }
 
+  async function handleVerify(e) {
+    e.preventDefault(); setBusy(true);
+    try {
+      const api = await import("../lib/api").then(m=>m.default);
+      const r = await api.post("/auth/verify-otp", { email: form.email, otp });
+      toast.success("Email verified successfully!");
+      navigate("/doctor-dashboard");
+    } catch(err) {
+      toast.error(err.response?.data?.message || "Invalid or expired OTP.");
+    } finally { setBusy(false); }
+  }
+
+  // Step 2: OTP Form (Only for Doctors)
+  if (step === 2) {
+    return <AuthShell title="Verify your email" subtitle="Enter the 6-digit code we sent to your email.">
+      <form onSubmit={handleVerify} className="space-y-4">
+        <Field label="Verification Code (OTP)" type="text" value={otp} onChange={setOtp} placeholder="e.g. 123456"/>
+        <button disabled={busy} className="btn-primary w-full py-3.5">{busy ? <Spinner/> : "Verify Account"}</button>
+      </form>
+    </AuthShell>;
+  }
+
+  // Step 1: Registration Form
   return <AuthShell title="Create your account" subtitle="A few details and you're ready to go.">
     <div className="mb-5 grid grid-cols-2 gap-2 rounded-2xl bg-slate-50 p-1">
       {["patient","doctor"].map((r) => <button key={r} type="button" onClick={() => setRole(r)} className={`rounded-xl py-2.5 text-sm font-bold capitalize ${role === r ? "bg-white text-teal-700 shadow-sm" : "text-slate-500"}`}>{r} account</button>)}
