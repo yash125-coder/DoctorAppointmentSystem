@@ -1,20 +1,20 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, trim: true, maxlength: 80 },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    phone: { type: String, trim: true },
-    password: { type: String, required: true, minlength: 8, select: false },
-    role: { type: String, enum: ["patient", "doctor", "admin"], default: "patient" },
-    avatar: { type: String, default: "" },
-    isActive: { type: Boolean, default: true },
-    resetPasswordToken: { type: String, select: false },
-    resetPasswordExpires: { type: Date, select: false }
-  },
-  { timestamps: true }
-);
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true, maxlength: 80 },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  phone: { type: String, trim: true },
+  password: { type: String, required: true, minlength: 8, select: false },
+  role: { type: String, enum: ["patient", "doctor", "admin"], default: "patient" },
+  avatar: { type: String, default: "" },
+  isActive: { type: Boolean, default: true },
+  verificationCode: { type: String, select: false },
+  isVerified: { type: Boolean, default: false },
+  verificationCodeExpires: { type: Date, select: false },
+  resetPasswordToken: { type: String, select: false },
+  resetPasswordExpires: { type: Date, select: false }
+}, { timestamps: true });
 
 userSchema.pre("save", async function(next) {
   if (!this.isModified("password")) return next();
