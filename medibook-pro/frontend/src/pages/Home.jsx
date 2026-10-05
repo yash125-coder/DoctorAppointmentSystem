@@ -63,21 +63,8 @@ export default function Home() {
                     <HeartHandshake size={25}/>
                   </div>
                   <div className="mt-16">
-                    <p className="text-sm text-slate-300">Next appointment</p>
-                    <h3 className="mt-2 text-2xl font-extrabold">Dr. Ananya Rao</h3>
-                    <p className="mt-1 text-teal-200">Dermatology · Clinic visit</p>
-                    <div className="mt-6 grid grid-cols-2 gap-3">
-                      <div className="rounded-2xl bg-white/10 p-3"><CalendarCheck2 size={17}/><p className="mt-2 text-sm font-bold">Tue, 30 Sep</p></div>
-                      <div className="rounded-2xl bg-white/10 p-3"><Clock3 size={17}/><p className="mt-2 text-sm font-bold">10:30 AM</p></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-3 p-2 pt-5 text-center">
-                  <div><b className="text-xl text-ink">4.9</b><p className="text-xs text-slate-500">avg. rating</p></div>
-                  <div><b className="text-xl text-ink">1,200+</b><p className="text-xs text-slate-500">appointments</p></div>
-                  <div><b className="text-xl text-ink">30 min</b><p className="text-xs text-slate-500">typical visit</p></div>
-                </div>
-              </div>
+              
+             </div>
             </div>
           </div>
         </section>
