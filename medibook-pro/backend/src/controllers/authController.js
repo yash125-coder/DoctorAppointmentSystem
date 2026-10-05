@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import User from "../models/User.js";
 import Doctor from "../models/Doctor.js";
 import { signToken } from "../utils/token.js";
-import { sendEmail } from "../utils/mailer.js";
+import { sendEmail, verificationEmail } from "../utils/mailer.js";
 
 function validationError(req) {
   const errors = validationResult(req);
@@ -40,6 +40,16 @@ export async function register(req, res) {
         { day: 4, start: "09:00", end: "17:00", enabled: true },
         { day: 5, start: "09:00", end: "17:00", enabled: true }
       ]
+    });
+
+    // Generate 6-digit verification code/OTP for Doctor
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const emailData = verificationEmail(otp);
+
+    await sendEmail({
+      to: user.email,
+      subject: emailData.subject,
+      html: emailData.html
     });
   }
 
