@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { register, login, me, forgotPassword, resetPassword } from "../controllers/authController.js";
 import { protect } from "../middleware/auth.js";
 
 const router = Router();
