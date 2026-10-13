@@ -112,21 +112,6 @@ export async function updateSchedule(req, res) {
   }
 }
 
-export async function doctorAppointments(req, res) {
-  try {
-    const doctor = await Doctor.findOne({ user: req.user.id });
-    if (!doctor) return res.status(404).json({ message: "Doctor profile not found" });
-
-    const appointments = await Appointment.find({ doctor: doctor._id })
-      .populate("patient", "name email phone avatar")
-      .sort({ date: 1, time: 1, createdAt: -1 });
-    res.json(appointments);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-
 export async function getDoctor(req, res) {
   try {
     const doctor = await Doctor.findById(req.params.id).populate("user", "name email avatar");
