@@ -112,16 +112,6 @@ export async function updateSchedule(req, res) {
   }
 }
 
-export async function getDoctor(req, res) {
-  try {
-    const doctor = await Doctor.findById(req.params.id).populate("user", "name email avatar");
-    if (!doctor) return res.status(404).json({ message: "Doctor not found" });
-    res.json(doctor);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
 function minutesToTime(m) {
   const h = Math.floor(m / 60).toString().padStart(2, '0');
   const min = (m % 60).toString().padStart(2, '0');
