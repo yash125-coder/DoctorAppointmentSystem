@@ -1,23 +1,15 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { register, login, me } from "../controllers/authController.js";
+import { register, me } from "../controllers/authController.js";
 import { protect } from "../middleware/auth.js";
 
 const router = Router();
 
-const password = body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters.");
-
 router.post("/register", [
   body("name").notEmpty().withMessage("Name is required."),
   body("email").isEmail().withMessage("Enter a valid email."),
-  password
+  body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters.")
 ], register);
-
-router.post("/login", [
-  body("email").isEmail().withMessage("Enter a valid email."),
-  body("password").notEmpty().withMessage("Password is required."),
-  body("role").isIn(["patient", "doctor", "admin"]).withMessage("Invalid account type.")
-], login);
 
 router.get("/me", protect, me);
 
