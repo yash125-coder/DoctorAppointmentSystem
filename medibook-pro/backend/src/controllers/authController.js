@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
+import { register, login, me } from "../controllers/authController.js";
 import { protect } from "../middleware/auth.js";
 
 const router = Router();
@@ -17,10 +18,6 @@ router.post("/login", [
   body("password").notEmpty().withMessage("Password is required."),
   body("role").isIn(["patient", "doctor", "admin"]).withMessage("Invalid account type.")
 ], login);
-
-router.post("/forgot-password", body("email").isEmail().withMessage("Enter a valid email."), forgotPassword);
-
-router.post("/reset-password/:token", password, resetPassword);
 
 router.get("/me", protect, me);
 
