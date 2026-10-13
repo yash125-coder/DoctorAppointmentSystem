@@ -126,29 +126,6 @@ export async function doctorAppointments(req, res) {
   }
 }
 
-export async function listDoctors(req, res) {
-  try {
-    const { search, specialization, location, minRating } = req.query;
-    const query = {};
-    if (specialization) query.specialization = new RegExp(specialization, 'i');
-    if (location) query.location = new RegExp(location, 'i');
-    if (minRating) query.rating = { $gte: Number(minRating) };
-
-    const doctors = await Doctor.find(query).populate("user", "name email avatar");
-
-    if (search) {
-      const searchLower = search.toLowerCase();
-      const filtered = doctors.filter(d =>
-        (d.user && d.user.name && d.user.name.toLowerCase().includes(searchLower)) ||
-        (d.specialization && d.specialization.toLowerCase().includes(searchLower))
-      );
-      return res.json(filtered);
-    }
-    res.json(doctors);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
 
 export async function getDoctor(req, res) {
   try {
