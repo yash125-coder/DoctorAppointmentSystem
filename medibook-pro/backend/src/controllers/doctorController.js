@@ -144,9 +144,7 @@ export async function deleteDoctor(req, res) {
     res.status(500).json({ message: "Server error while deleting doctor.", error: error.message });
   }
 }
-import Doctor from "../models/Doctor.js";
-import Appointment from "../models/Appointment.js";
-import User from "../models/User.js";
+
 
 export async function listDoctors(req, res) {
   try {
