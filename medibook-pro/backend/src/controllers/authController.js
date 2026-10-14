@@ -1,8 +1,40 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
-exports.login = async (req, res) => {
+export const register = async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: "सर्व माहिती भरणे आवश्यक आहे." });
+    }
+
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ error: "हा ईमेल आधीच नोंदणीकृत आहे." });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role: role || 'patient'
+    });
+
+    await user.save();
+
+    res.status(201).json({ message: "नोंदणी यशस्वी झाली!" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "सर्व्हर एरर: " + err.message });
+  }
+};
+
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -43,6 +75,19 @@ exports.login = async (req, res) => {
       }
     });
 
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "सर्व्हर एरर: " + err.message });
+  }
+};
+
+export const me = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ error: "युझर सापडला नाही." });
+    }
+    res.status(200).json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "सर्व्हर एरर: " + err.message });
